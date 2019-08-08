@@ -42,7 +42,7 @@ sudo vi /etc/consul.d/service_web.json
 CHANGE TAG TO v1.2.4
 consul reload
 ```
-Lets rerun the DNS query, it should return the IP of the `web` service running in `dc-east` :
+- Lets rerun the DNS query, it should return the IP of the `web` service running in `dc-east` :
 ```
 dc_east $  dig @127.0.0.1 -p 8600 web6.query.consul +short
 172.20.20.121 # IP of web running in dc-east
