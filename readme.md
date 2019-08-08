@@ -35,7 +35,7 @@ This query is going to look for `web` service with tag `v1.2.4` first in `dc-eas
 dc_east $  dig @127.0.0.1 -p 8600 web.query.consul +short
 172.20.20.221 # IP of web running in dc-west
 ```
-It returns the IP address of the `web` service of `client-node-1` in `dc-west`.Remember only the `web` service in `dc-west` is running `v1.2.4`. Now lets change the tag of the `web` service that is running in `dc-east` to `v.1.2.4`, and execute the DNS query again, in `dc-east` folder execute :
+- It returns the IP address of the `web` service of `client-node-1` in `dc-west`.Remember only the `web` service in `dc-west` is running `v1.2.4`. Now lets change the tag of the `web` service that is running in `dc-east` to `v.1.2.4`, and execute the DNS query again, in `dc-east` folder execute :
 ```
 vagrant ssh client-node-1
 sudo vi /etc/consul.d/service_web.json
@@ -54,5 +54,6 @@ dc_east $  dig @127.0.0.1 -p 8600 web6.query.consul +short
 - If you decide to extend the configuration to 3 Consul servers in each DC and more client, you need good hardware before doing it.
 - Consul servers number 2 and 3 both DCs are not being used in this example, they might be used for extending the setup.
 - Port `8500` from `dc-east-server-node-1` is exposed to port `8500` of the host machine.
-- Port `8600` from `dc-west-server-node-1` is exposed to port `8600` of the host machine.
+- UDP Port `8600` from `dc-east-server-node-1` is exposed to port `8600` of the host machine.
+- Port `8700` from `dc-west-server-node-1` is exposed to port `8700` of the host machine.
 
