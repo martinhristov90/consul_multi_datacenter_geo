@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       n1.vm.hostname = "dc-east-server-node-1"
       n1.vm.network "private_network", ip: "172.20.20.111"
       n1.vm.network "forwarded_port", guest: 8500, host: 8500
-      n1.vm.network "forwarded_port", guest: 8600, host: 8600
+      n1.vm.network "forwarded_port", guest: 8600, host: 8600, protocol: "udp" #UDP for DNS
       n1.vm.provision :shell, path: "provision_server_nodes/server_node_1/provision.sh", privileged: true
   end
 

@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "server-node-1" do |n1|
       n1.vm.hostname = "dc-west-server-node-1"
       n1.vm.network "private_network", ip: "172.20.20.211"
-      n1.vm.network "forwarded_port", guest: 8500, host: 8600 # This consul is going to be forwarded to 8600 host port
+      n1.vm.network "forwarded_port", guest: 8500, host: 8700 # This consul is going to be forwarded to 8700 host port
       n1.vm.provision :shell, path: "provision_server_nodes/server_node_1/provision.sh", privileged: true
   end
 
