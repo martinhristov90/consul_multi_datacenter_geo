@@ -1,4 +1,4 @@
-### Simple Vagrant example of using Consul cluster in multi data center environment.
+### Simple Vagrant example of using Consul cluster in multi data center environment, utilizing prepared queries to perform Geo clustering.
 
 ### The configuration is extensible, the current setup provided looks like this: 
 
