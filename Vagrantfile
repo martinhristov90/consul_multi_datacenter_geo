@@ -31,21 +31,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         (1..server_count).each do |s|
         
             config.vm.define "server-node-#{dc_region}-#{s}" do |server_node|
-                ip = "172.20.20.#{110 + s}" if dc == 1
-                ip = "172.20.20.#{210 + s}" if dc == 2
+                # IP range depends on the dc 
+                ip = "172.20.20.#{110 + s}" if dc_region = "dc-east"
+                ip = "172.20.20.#{210 + s}" if dc_region = "dc-west"
 
                 hostname = "server-node-#{dc_region}-#{s}"
 
+                # Following ports will be exposed to the host machine.
                 port_host_UI = 8500 + s - 1 if dc_region == "dc-east"
                 port_host_UI = 8700 + s - 1 if dc_region == "dc-west"
 
+                # Following ports will be exposed to the host machine.
                 port_host_DNS = 8600 + s - 1 if dc_region == "dc-east"
                 port_host_DNS = 8800 + s - 1 if dc_region == "dc-west"
 
-                puts "IP : #{ip}, hostname : #{hostname} port_host_UI : #{port_host_UI}, port_host_DNS : #{port_host_DNS}"
+                #Printing some useful addressing info
+                puts "SERVER: IP : #{ip}, hostname : #{hostname} port_host_UI : #{port_host_UI}, port_host_DNS : #{port_host_DNS}"
 
                 # Setting hostname in VirtualBox (not to be ugly)
-
                 server_node.vm.provider :virtualbox do |vb|
                     vb.name = "server-node-#{dc_region}-#{s}"
                 end
@@ -56,23 +59,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 server_node.vm.network "forwarded_port", guest: 8600, host: port_host_DNS # This consul DNS port
                 # Provision section 
                 server_node.vm.provision :shell, path: "#{dc_region}/provision_server_nodes/server_node_#{s}/provision.sh", privileged: true
-            end
+             end
         end
+
         # How many clients to be created in each DC. Up to 99 clients, more would cause IP overlap.
         client_count = 1
 
         (1..client_count).each do |i|
 
             config.vm.define "client-node-#{dc_region}-#{i}" do |client|
-
+                
+                # IP range of the clients depends on the dc 
                 ip = "172.20.20.#{120 + i}" if dc_region == "dc-east"
                 ip = "172.20.20.#{220 + i}" if dc_region == "dc-west"
 
-
+                # Setting hostname pattern
                 hostname = "client-node-#{dc_region}-#{i}"
+
                 client.vm.hostname = hostname
                 client.vm.network "private_network", ip: ip
-                puts "IP : #{ip}, hostname : #{hostname}"
+
+                # Print some useful information
+                puts "CLIENT: IP : #{ip}, hostname : #{hostname}"
 
                 # Setting hostname in VirtualBox (not to be ugly)
                 client.vm.provider :virtualbox do |vb|
