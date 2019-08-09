@@ -15,7 +15,7 @@
     ```
     cd consul_multi_datacenter_geo
     ```
-- Run `bash start_dcs.sh` in project's directory.
+- Run `vagrant up` in project's directory.
 
 - You should now have a Consul multi-datacenter environment, with one server and client in each DC.
 
