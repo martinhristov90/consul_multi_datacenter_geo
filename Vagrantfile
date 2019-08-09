@@ -20,11 +20,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = DEMO_BOX_NAME
   config.vm.box_download_insecure = true
     # Two DC regions
-    (1..2).each do |dc|
-        # maps number of dc to dc name
-        dc_region = "dc-east" if dc == 1 
-        dc_region = "dc-west" if dc == 2
-        
+    data_centers = ["dc-east", "dc-west"]
+
+    data_centers.each do |dc_region|
+
         # How many server to be created in each DC? Up to 3 for now
         server_count = 1
 
@@ -32,8 +31,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         
             config.vm.define "server-node-#{dc_region}-#{s}" do |server_node|
                 # IP range depends on the dc 
-                ip = "172.20.20.#{110 + s}" if dc_region = "dc-east"
-                ip = "172.20.20.#{210 + s}" if dc_region = "dc-west"
+                ip = "172.20.20.#{110 + s}" if dc_region == "dc-east"
+                ip = "172.20.20.#{210 + s}" if dc_region == "dc-west"
 
                 hostname = "server-node-#{dc_region}-#{s}"
 
@@ -46,11 +45,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 port_host_DNS = 8800 + s - 1 if dc_region == "dc-west"
 
                 #Printing some useful addressing info
-                puts "SERVER: IP : #{ip}, hostname : #{hostname} port_host_UI : #{port_host_UI}, port_host_DNS : #{port_host_DNS}"
+                #puts "SERVER: IP : #{ip}, hostname : #{hostname} port_host_UI : #{port_host_UI}, port_host_DNS : #{port_host_DNS}"
 
                 # Setting hostname in VirtualBox (not to be ugly)
+                virtualbox_name = "server-node-dc-east-#{s}" if dc_region == "dc-east"
+                virtualbox_name = "server-node-dc-west-#{s}" if dc_region == "dc-west"
+
                 server_node.vm.provider :virtualbox do |vb|
-                    vb.name = "server-node-#{dc_region}-#{s}"
+                    vb.name = virtualbox_name
                 end
 
                 server_node.vm.hostname = hostname
@@ -80,11 +82,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 client.vm.network "private_network", ip: ip
 
                 # Print some useful information
-                puts "CLIENT: IP : #{ip}, hostname : #{hostname}"
+                #puts "CLIENT: IP : #{ip}, hostname : #{hostname}"
 
                 # Setting hostname in VirtualBox (not to be ugly)
+                virtualbox_name = "client-node-dc-east-#{i}" if dc_region == "dc-east"
+                virtualbox_name = "client-node-dc-west-#{i}" if dc_region == "dc-west"
+
                 client.vm.provider :virtualbox do |vb|
-                    vb.name = "client-node-#{dc_region}-#{i}"
+                    vb.name = virtualbox_name
                 end
 
                 # Provision section 
