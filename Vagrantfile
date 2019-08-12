@@ -48,11 +48,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 #puts "SERVER: IP : #{ip}, hostname : #{hostname} port_host_UI : #{port_host_UI}, port_host_DNS : #{port_host_DNS}"
 
                 # Setting hostname in VirtualBox (not to be ugly)
-                virtualbox_name = "server-node-dc-east-#{s}" if dc_region == "dc-east"
-                virtualbox_name = "server-node-dc-west-#{s}" if dc_region == "dc-west"
-
                 server_node.vm.provider :virtualbox do |vb|
-                    vb.name = virtualbox_name
+                    vb.name = hostname
                 end
 
                 server_node.vm.hostname = hostname
@@ -84,6 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # Print some useful information
                 #puts "CLIENT: IP : #{ip}, hostname : #{hostname}"
 
+                # Setting hostname in VirtualBox (not to be ugly)
                 client.vm.provider :virtualbox do |vb|
                     vb.name = hostname
                 end
